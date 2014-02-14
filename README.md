@@ -1,4 +1,4 @@
 apljax
 ======
 
-Application Programmatic Listing for JAX-RS - pronouncned Apple Jacks (R)
+Application Programmatic Listing for JAX-RS - pronounced Apple Jacks (R)
