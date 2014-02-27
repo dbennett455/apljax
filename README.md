@@ -1,7 +1,7 @@
 apljax
 ======
 
-Application Programmatic Listing for JAX-RS - pronouncned Apple Jacks (R)
+Application Programmatic Listing for JAX-RS - pronounced Apple Jacks (R)
 
 This is in a very early stage right now.  The AppleJacks O's are currently
 loaded from the classpath.
