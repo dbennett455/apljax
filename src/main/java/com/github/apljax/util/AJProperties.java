@@ -1,4 +1,4 @@
-package com.bensoft.apljax.util;
+package com.github.apljax.util;
 
 import java.io.IOException;
 import java.io.InputStream;

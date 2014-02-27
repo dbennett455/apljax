@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bensoft.apljax.discover;
+package com.github.apljax.discover;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -30,7 +30,7 @@ import java.util.regex.PatternSyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bensoft.apljax.util.AJProperties;
+import com.github.apljax.util.AJProperties;
 import com.impetus.annovention.Discoverer;
 
 /**
@@ -86,7 +86,9 @@ public class AJDiscoverer extends Discoverer {
             	Matcher m=classPathMatching.matcher(p.getPath());
         		if (m.find()) {
     				ret.add(p);
-    			}
+    				log.debug("classpath included: {}", p.toString());
+    			} else
+    				log.debug("classpath excluded: {}", p.toString());
     		}
             return ret.toArray(new URL[ret.size()]);
         }

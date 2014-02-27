@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bensoft.apljax.discover;
+package com.github.apljax.discover;
 
 /**
  * Basic implementation to skip well-known packages and allow only *.class files

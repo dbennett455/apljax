@@ -1,4 +1,4 @@
-package com.bensoft.apljax.os;
+package com.github.apljax.os;
 
 import java.util.TreeMap;
 import java.util.TreeSet;

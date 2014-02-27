@@ -1,4 +1,4 @@
-package com.bensoft.apljax;
+package com.github.apljax;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,12 +29,12 @@ import javassist.bytecode.MethodInfo;
 import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.MemberValue;
 
-import com.bensoft.apljax.annotation.Comment;
-import com.bensoft.apljax.discover.AJDiscoverer;
-import com.bensoft.apljax.os.ResourceClass;
-import com.bensoft.apljax.os.ResourceMethod;
-import com.bensoft.apljax.os.ResourceParameter;
-import com.bensoft.apljax.util.AJProperties;
+import com.github.apljax.annotation.Comment;
+import com.github.apljax.discover.AJDiscoverer;
+import com.github.apljax.os.ResourceClass;
+import com.github.apljax.os.ResourceMethod;
+import com.github.apljax.os.ResourceParameter;
+import com.github.apljax.util.AJProperties;
 import com.impetus.annovention.Discoverer;
 import com.impetus.annovention.listener.ClassAnnotationObjectDiscoveryListener;
 import com.impetus.annovention.listener.MethodAnnotationObjectDiscoveryListener;

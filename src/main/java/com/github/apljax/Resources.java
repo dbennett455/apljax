@@ -1,12 +1,12 @@
-package com.bensoft.apljax;
+package com.github.apljax;
 
 import java.util.TreeMap;
 
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.MethodInfo;
 
-import com.bensoft.apljax.os.ResourceClass;
-import com.bensoft.apljax.os.ResourceMethod;
+import com.github.apljax.os.ResourceClass;
+import com.github.apljax.os.ResourceMethod;
 
 public class Resources {
 

@@ -1,4 +1,4 @@
-package com.bensoft.apljax.annotation;
+package com.github.apljax.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

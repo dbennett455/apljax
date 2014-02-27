@@ -8,11 +8,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bensoft.apljax.Resources;
-import com.bensoft.apljax.Scanner;
-import com.bensoft.apljax.os.ResourceClass;
-import com.bensoft.apljax.os.ResourceMethod;
-import com.bensoft.apljax.os.ResourceParameter;
+import com.github.apljax.Resources;
+import com.github.apljax.Scanner;
+import com.github.apljax.os.ResourceClass;
+import com.github.apljax.os.ResourceMethod;
+import com.github.apljax.os.ResourceParameter;
 
 public class DumpResources {
 
