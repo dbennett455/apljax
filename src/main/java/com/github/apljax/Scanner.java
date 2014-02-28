@@ -25,21 +25,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javassist.bytecode.ClassFile;
+import javassist.bytecode.FieldInfo;
 import javassist.bytecode.MethodInfo;
 import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.MemberValue;
 
 import com.github.apljax.annotation.Comment;
 import com.github.apljax.discover.AJDiscoverer;
-import com.github.apljax.os.ResourceClass;
-import com.github.apljax.os.ResourceMethod;
-import com.github.apljax.os.ResourceParameter;
+import com.github.apljax.resource.ResourceClass;
+import com.github.apljax.resource.ResourceField;
+import com.github.apljax.resource.ResourceMethod;
+import com.github.apljax.resource.ResourceParameter;
+import com.github.apljax.resource.Resources;
 import com.github.apljax.util.AJProperties;
 import com.impetus.annovention.Discoverer;
 import com.impetus.annovention.listener.ClassAnnotationObjectDiscoveryListener;
+import com.impetus.annovention.listener.FieldAnnotationObjectDiscoveryListener;
 import com.impetus.annovention.listener.MethodAnnotationObjectDiscoveryListener;
 import com.impetus.annovention.listener.MethodParameterAnnotationObjectDiscoveryListener;
 import com.impetus.annovention.util.MethodParameter;
+import com.impetus.annovention.util.MethodParameters;
 
 public class Scanner {
 
@@ -75,6 +80,7 @@ public class Scanner {
 	public Resources scan() {
 		Discoverer discoverer = new AJDiscoverer();
 		discoverer.addAnnotationListener(new MyClassAnnotationListener(resources));
+		discoverer.addAnnotationListener(new MyFieldAnnotationListener(resources));
 		discoverer.addAnnotationListener(new MyMethodAnnotationListener(resources));
 		discoverer.addAnnotationListener(new MyMethodParameterAnnotationListener(resources));
 		discoverer.discover(true, true, true, true, true, true);
@@ -160,6 +166,88 @@ public class Scanner {
 		}
 	}
 
+	/**
+	 *
+	 * Report on method parameter annotations with and without parameters using the new Javassist object listener style
+	 *
+	 */
+	static class MyFieldAnnotationListener implements FieldAnnotationObjectDiscoveryListener {
+
+		private Resources resources;
+
+		public MyFieldAnnotationListener(Resources resources) {
+			super();
+			this.resources = resources;
+		}
+
+		public void discovered(ClassFile clazz, FieldInfo field, Annotation annotation) {
+
+			if (classNameMatch(clazz)) {
+
+				if (annotation != null && annotation.getTypeName() != null) {
+
+					// get annotation value
+					MemberValue myParamVal=annotation.getMemberValue("value");
+					String myValue=null;
+					if (myParamVal != null)
+						myValue=myParamVal.toString();
+
+					// get or add method parameter
+					ResourceClass cls=resources.getResourceClass(clazz);
+					ResourceField fld=cls.getResourceField(field);
+
+					if ("javax.ws.rs.PathParam".equals(annotation.getTypeName())) {
+						fld.setRequestType(ResourceField.RequestType.PATH);
+						fld.setName(myValue);
+					} else if ("javax.ws.rs.QueryParam".equals(annotation.getTypeName())) {
+						fld.setRequestType(ResourceField.RequestType.QUERY);
+						fld.setName(myValue);
+					} else if ("javax.ws.rs.MatrixParam".equals(annotation.getTypeName())) {
+						fld.setRequestType(ResourceField.RequestType.MATRIX);
+						fld.setName(myValue);
+					} else if ("javax.ws.rs.HeaderParam".equals(annotation.getTypeName())) {
+						fld.setRequestType(ResourceField.RequestType.HEADER);
+						fld.setName(myValue);
+					} else if ("javax.ws.rs.CookieParam".equals(annotation.getTypeName())) {
+						fld.setRequestType(ResourceField.RequestType.COOKIE);
+						fld.setName(myValue);
+					} else if ("javax.ws.rs.FormParam".equals(annotation.getTypeName())) {
+						fld.setRequestType(ResourceField.RequestType.FORM);
+						fld.setName(myValue);
+					} else if ("javax.ws.rs.DefaultValue".equals(annotation.getTypeName())) {
+						fld.setDefaultValue(myValue);
+					} else if (annotation.getTypeName().indexOf(".apljax.annotation.Comment") > 0) {
+						fld.setComment(myValue);
+					}
+
+					// Set the javaType from the Descriptor
+					if (fld.getJavaType() == null) {
+						String desc=field.getDescriptor();
+						List<String> lJt=MethodParameters.parameterTypes(desc);
+						if (lJt != null && lJt.size() > 0) {
+							fld.setJavaType(lJt.get(0));
+						}
+					}
+
+   				log.debug("Discovered Field in Class {} name: {} type:{} with Annotation({} value={})",
+   						clazz.getName(), field.getName(), fld.getJavaType(), annotation.getTypeName(), myParamVal);
+				}
+			}
+		}
+
+		public String[] supportedAnnotations() {
+			return new String[] {
+				PathParam.class.getName(),
+				QueryParam.class.getName(),
+				MatrixParam.class.getName(),
+				HeaderParam.class.getName(),
+				CookieParam.class.getName(),
+				FormParam.class.getName(),
+				DefaultValue.class.getName(),
+				Comment.class.getName()
+			};
+		}
+	}
 
 	/**
 	 * Report on method annotation with and without parameters

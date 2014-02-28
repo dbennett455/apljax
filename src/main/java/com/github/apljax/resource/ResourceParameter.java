@@ -1,4 +1,4 @@
-package com.github.apljax.os;
+package com.github.apljax.resource;
 
 import com.impetus.annovention.util.MethodParameter;
 
@@ -15,7 +15,7 @@ public class ResourceParameter {
 	private MethodParameter methodParameter = null;
 	private Integer index = null;
 	private String name = null;
-	private ParameterType type = null;
+	private ParameterType type = null; // JAX-RS request type
 	private String defaultValue = "";
 	private String comment = null;
 
@@ -36,6 +36,7 @@ public class ResourceParameter {
 	public Integer getIndex() {
 		return index;
 	}
+
 
 	public MethodParameter getMethodParameter() {
 		return methodParameter;

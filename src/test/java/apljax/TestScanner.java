@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.apljax.Resources;
 import com.github.apljax.Scanner;
+import com.github.apljax.resource.Resources;
 
 public class TestScanner {
 

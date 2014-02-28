@@ -1,12 +1,9 @@
-package com.github.apljax;
+package com.github.apljax.resource;
 
 import java.util.TreeMap;
 
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.MethodInfo;
-
-import com.github.apljax.os.ResourceClass;
-import com.github.apljax.os.ResourceMethod;
 
 public class Resources {
 
@@ -54,7 +51,7 @@ public class Resources {
 	 * @return
 	 */
 	public ResourceClass newResourceClass(ClassFile cf) {
-		return new ResourceClass(cf);
+		return new ResourceClass(this,cf);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.github.apljax.os;
+package com.github.apljax.resource;
 
 import java.util.TreeMap;
 

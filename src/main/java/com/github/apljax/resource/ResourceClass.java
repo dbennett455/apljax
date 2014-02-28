@@ -1,9 +1,10 @@
-package com.github.apljax.os;
+package com.github.apljax.resource;
 
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javassist.bytecode.ClassFile;
+import javassist.bytecode.FieldInfo;
 import javassist.bytecode.MethodInfo;
 
 /**
@@ -14,16 +15,20 @@ import javassist.bytecode.MethodInfo;
  */
 public class ResourceClass {
 
-	private ClassFile classFile;
+	private Resources resources=null;
+	private ClassFile classFile=null;
 	private String path=null;
 	private String produces=null;
 	private String consumes=null;
 	private String comment=null;
+	private TreeMap<String,ResourceField> resourceFields=null;
 	private TreeMap<String,ResourceMethod> resourceMethods=null;
 
-	public ResourceClass(ClassFile cf) {
+	public ResourceClass(Resources r, ClassFile cf) {
 		super();
+		this.resources = r;
 		this.classFile = cf;
+		this.resourceFields = new TreeMap<String,ResourceField>();
 		this.resourceMethods = new TreeMap<String,ResourceMethod>();
 	}
 
@@ -39,12 +44,39 @@ public class ResourceClass {
 		return consumes;
 	}
 
+	public String getFullPath() {
+		String ret=null;
+		// todo: code it, see util.PathTools
+		return ret;
+
+	}
+
 	public String getPath() {
 		return path;
 	}
 
 	public String getProduces() {
 		return produces;
+	}
+
+	/**
+	 * get or create a ResourceField for a given path
+	 *
+	 * @param path
+	 * @return a ResourceField
+	 */
+	public ResourceField getResourceField(FieldInfo fld) {
+		String key=fld.getName()+fld.getDescriptor();
+		ResourceField ret=this.resourceFields.get(key);
+		if (ret == null) {
+			ret=newResourceField(this,fld);
+			this.resourceFields.put(key, ret);
+		}
+		return ret;
+	}
+
+	public TreeMap<String,ResourceField> getResourceFields() {
+		return resourceFields;
 	}
 
 	/**
@@ -63,10 +95,22 @@ public class ResourceClass {
 		return ret;
 	}
 
+
 	public TreeMap<String,ResourceMethod> getResourceMethods() {
 		return resourceMethods;
 	}
 
+	public Resources getResources() {
+		return resources;
+	}
+
+	/**
+	 * Create a new Resource field
+	 *
+	 */
+	public ResourceField newResourceField(ResourceClass cls, FieldInfo fld) {
+		return new ResourceField(cls,fld);
+	}
 
 	/**
 	 * Create a new Resource method
@@ -76,8 +120,9 @@ public class ResourceClass {
 		return new ResourceMethod(cls,met);
 	}
 
-	public void setComment(String comment) {
+	public ResourceClass setComment(String comment) {
 		this.comment = comment;
+		return this;
 	}
 
 	public ResourceClass setConsumes(String consumes) {
@@ -92,6 +137,11 @@ public class ResourceClass {
 
 	public ResourceClass setProduces(String produces) {
 		this.produces = produces;
+		return this;
+	}
+
+	public ResourceClass setResources(Resources resources) {
+		this.resources = resources;
 		return this;
 	}
 
