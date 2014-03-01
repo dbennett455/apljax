@@ -21,6 +21,8 @@ public class ResourceClass {
 	private String produces=null;
 	private String consumes=null;
 	private String comment=null;
+	private String resourceId=null;
+	private String defaultPath=null;
 	private TreeMap<String,ResourceField> resourceFields=null;
 	private TreeMap<String,ResourceMethod> resourceMethods=null;
 
@@ -42,6 +44,10 @@ public class ResourceClass {
 
 	public String getConsumes() {
 		return consumes;
+	}
+
+	public String getDefaultPath() {
+		return defaultPath;
 	}
 
 	public String getFullPath() {
@@ -79,6 +85,10 @@ public class ResourceClass {
 		return resourceFields;
 	}
 
+	public String getResourceId() {
+		return resourceId;
+	}
+
 	/**
 	 * get or create a ResourceMethod for a given path
 	 *
@@ -95,7 +105,6 @@ public class ResourceClass {
 		return ret;
 	}
 
-
 	public TreeMap<String,ResourceMethod> getResourceMethods() {
 		return resourceMethods;
 	}
@@ -103,6 +112,7 @@ public class ResourceClass {
 	public Resources getResources() {
 		return resources;
 	}
+
 
 	/**
 	 * Create a new Resource field
@@ -130,6 +140,11 @@ public class ResourceClass {
 		return this;
 	}
 
+	public ResourceClass setDefaultPath(String defaultPath) {
+		this.defaultPath = defaultPath;
+		return this;
+	}
+
 	public ResourceClass setPath(String path) {
 		this.path = path;
 		return this;
@@ -137,6 +152,11 @@ public class ResourceClass {
 
 	public ResourceClass setProduces(String produces) {
 		this.produces = produces;
+		return this;
+	}
+
+	public ResourceClass setResourceId(String resourceId) {
+		this.resourceId = resourceId;
 		return this;
 	}
 

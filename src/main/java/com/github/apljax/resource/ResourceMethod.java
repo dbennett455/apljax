@@ -18,6 +18,8 @@ public class ResourceMethod {
 	private String consumes=null;
 	private String produces=null;
 	private String comment=null;
+	private String resourceId=null;
+	private String defaultPath=null;
 	private TreeMap<Integer, ResourceParameter> resourceParameters=null;
 
 	public ResourceMethod(ResourceClass cls, MethodInfo met) {
@@ -33,6 +35,10 @@ public class ResourceMethod {
 
 	public String getConsumes() {
 		return consumes;
+	}
+
+	public String getDefaultPath() {
+		return defaultPath;
 	}
 
 	public MethodInfo getMethodInfo() {
@@ -55,6 +61,10 @@ public class ResourceMethod {
 		return requestMethod;
 	}
 
+	public String getResourceId() {
+		return resourceId;
+	}
+
 	/**
 	 * get or create a ResourceParameter for a given name
 	 *
@@ -74,12 +84,18 @@ public class ResourceMethod {
 		return resourceParameters;
 	}
 
-	public void setComment(String comment) {
+	public ResourceMethod setComment(String comment) {
 		this.comment = comment;
+		return this;
 	}
 
 	public ResourceMethod setConsumes(String consumes) {
 		this.consumes = consumes;
+		return this;
+	}
+
+	public ResourceMethod setDefaultPath(String defaultPath) {
+		this.defaultPath = defaultPath;
 		return this;
 	}
 
@@ -95,6 +111,11 @@ public class ResourceMethod {
 
 	public ResourceMethod setRequestMethod(RequestMethod requestMethod) {
 		this.requestMethod = requestMethod;
+		return this;
+	}
+
+	public ResourceMethod setResourceId(String resourceId) {
+		this.resourceId = resourceId;
 		return this;
 	}
 
