@@ -21,10 +21,9 @@ public class PathTools {
 			// trim
 			this.path = pth.replaceAll("(^[\\r\\n\\s\\/])|([\\r\\n\\s\\/]$)","");
 		}
-		// check for alias 
-		
-		
-		
+
+
+
 
 
 		this.path = path;
