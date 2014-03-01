@@ -149,7 +149,7 @@ public class Scanner {
 					} else if (Comment.class.getName().equals(annotation.getTypeName())) {
 						cls.setComment(myValue);
 					} else if (ResourceId.class.getName().equals(annotation.getTypeName())) {
-						cls.setResourceId(myValue);
+						cls.setDefinedResourceId(myValue);
 					} else if (DefaultPath.class.getName().equals(annotation.getTypeName())) {
 						cls.setDefaultPath(myValue);
 					}
@@ -303,7 +303,7 @@ public class Scanner {
 					} else if (Comment.class.getName().equals(annotation.getTypeName())) {
 						met.setComment(myValue);
 					} else if (ResourceId.class.getName().equals(annotation.getTypeName())) {
-						met.setResourceId(myValue);
+						met.setDefinedResourceId(myValue);
 					} else if (DefaultPath.class.getName().equals(annotation.getTypeName())) {
 						met.setDefaultPath(myValue);
 					}
