@@ -3,7 +3,6 @@ package com.github.apljax.resource;
 import java.util.TreeMap;
 
 import javassist.bytecode.ClassFile;
-import javassist.bytecode.MethodInfo;
 
 public class Resources {
 

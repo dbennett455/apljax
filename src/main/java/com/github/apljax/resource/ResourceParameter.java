@@ -2,8 +2,6 @@ package com.github.apljax.resource;
 
 import com.impetus.annovention.util.MethodParameter;
 
-import javassist.bytecode.FieldInfo;
-
 public class ResourceParameter {
 
 	// JAX-RS parameter types

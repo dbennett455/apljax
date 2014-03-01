@@ -5,7 +5,6 @@ import java.util.TreeMap;
 import com.github.apljax.util.PathBuilder;
 import com.github.apljax.util.ResourceIdExtractor;
 
-import javassist.bytecode.FieldInfo;
 import javassist.bytecode.MethodInfo;
 
 

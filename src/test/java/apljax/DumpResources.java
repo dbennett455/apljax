@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import java.util.TreeMap;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.apljax.Scanner;
 import com.github.apljax.resource.ResourceClass;
@@ -17,7 +15,7 @@ import com.github.apljax.resource.Resources;
 
 public class DumpResources {
 
-    private final Logger log=LoggerFactory.getLogger(TestScanner.class);
+    //private final Logger log=LoggerFactory.getLogger(TestScanner.class);
 
 	@Test
 	public void test() {
