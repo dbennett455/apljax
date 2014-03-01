@@ -31,6 +31,8 @@ import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.MemberValue;
 
 import com.github.apljax.annotation.Comment;
+import com.github.apljax.annotation.DefaultPath;
+import com.github.apljax.annotation.ResourceId;
 import com.github.apljax.discover.AJDiscoverer;
 import com.github.apljax.resource.ResourceClass;
 import com.github.apljax.resource.ResourceField;
@@ -138,14 +140,18 @@ public class Scanner {
 					// get or add class
 					ResourceClass cls=resources.getResourceClass(clazz);
 
-					if ("javax.ws.rs.Path".equals(annotation.getTypeName())) {
+					if (Path.class.getName().equals(annotation.getTypeName())) {
 						cls.setPath(myValue);
-					} else if ("javax.ws.rs.Consumes".equals(annotation.getTypeName())) {
+					} else if (Consumes.class.getName().equals(annotation.getTypeName())) {
 						cls.setConsumes(myValue);
-					} else if ("javax.ws.rs.Produces".equals(annotation.getTypeName())) {
+					} else if (Produces.class.getName().equals(annotation.getTypeName())) {
 						cls.setProduces(myValue);
-					} else if (annotation.getTypeName().indexOf(".apljax.annotation.Comment") > 0) {
+					} else if (Comment.class.getName().equals(annotation.getTypeName())) {
 						cls.setComment(myValue);
+					} else if (ResourceId.class.getName().equals(annotation.getTypeName())) {
+						cls.setResourceId(myValue);
+					} else if (DefaultPath.class.getName().equals(annotation.getTypeName())) {
+						cls.setDefaultPath(myValue);
 					}
 
 					log.debug("Discovered Class[{}] with Annotation ({}) value={}",clazz.getName(),annotation.getTypeName(),myValue);
@@ -161,7 +167,9 @@ public class Scanner {
                 Path.class.getName(),
                 Produces.class.getName(),
                 Consumes.class.getName(),
-                Comment.class.getName()
+                Comment.class.getName(),
+                ResourceId.class.getName(),
+                DefaultPath.class.getName()
 			};
 		}
 	}
@@ -196,27 +204,27 @@ public class Scanner {
 					ResourceClass cls=resources.getResourceClass(clazz);
 					ResourceField fld=cls.getResourceField(field);
 
-					if ("javax.ws.rs.PathParam".equals(annotation.getTypeName())) {
+					if (PathParam.class.getName().equals(annotation.getTypeName())) {
 						fld.setRequestType(ResourceField.RequestType.PATH);
 						fld.setName(myValue);
-					} else if ("javax.ws.rs.QueryParam".equals(annotation.getTypeName())) {
+					} else if (QueryParam.class.getName().equals(annotation.getTypeName())) {
 						fld.setRequestType(ResourceField.RequestType.QUERY);
 						fld.setName(myValue);
-					} else if ("javax.ws.rs.MatrixParam".equals(annotation.getTypeName())) {
+					} else if (MatrixParam.class.getName().equals(annotation.getTypeName())) {
 						fld.setRequestType(ResourceField.RequestType.MATRIX);
 						fld.setName(myValue);
-					} else if ("javax.ws.rs.HeaderParam".equals(annotation.getTypeName())) {
+					} else if (HeaderParam.class.getName().equals(annotation.getTypeName())) {
 						fld.setRequestType(ResourceField.RequestType.HEADER);
 						fld.setName(myValue);
-					} else if ("javax.ws.rs.CookieParam".equals(annotation.getTypeName())) {
+					} else if (CookieParam.class.getName().equals(annotation.getTypeName())) {
 						fld.setRequestType(ResourceField.RequestType.COOKIE);
 						fld.setName(myValue);
-					} else if ("javax.ws.rs.FormParam".equals(annotation.getTypeName())) {
+					} else if (FormParam.class.getName().equals(annotation.getTypeName())) {
 						fld.setRequestType(ResourceField.RequestType.FORM);
 						fld.setName(myValue);
-					} else if ("javax.ws.rs.DefaultValue".equals(annotation.getTypeName())) {
+					} else if (DefaultValue.class.getName().equals(annotation.getTypeName())) {
 						fld.setDefaultValue(myValue);
-					} else if (annotation.getTypeName().indexOf(".apljax.annotation.Comment") > 0) {
+					} else if (Comment.class.getName().equals(annotation.getTypeName())) {
 						fld.setComment(myValue);
 					}
 
@@ -229,8 +237,8 @@ public class Scanner {
 						}
 					}
 
-   				log.debug("Discovered Field in Class {} name: {} type:{} with Annotation({} value={})",
-   						clazz.getName(), field.getName(), fld.getJavaType(), annotation.getTypeName(), myParamVal);
+       				log.debug("Discovered Field in Class {} name: {} type:{} with Annotation({} value={})",
+       						clazz.getName(), field.getName(), fld.getJavaType(), annotation.getTypeName(), myParamVal);
 				}
 			}
 		}
@@ -278,22 +286,26 @@ public class Scanner {
 					ResourceClass cls=resources.getResourceClass(clazz);
 					ResourceMethod met=cls.getResourceMethod(method);
 
-					if ("javax.ws.rs.Path".equals(annotation.getTypeName())) {
+					if (Path.class.getName().equals(annotation.getTypeName())) {
 						met.setPath(myValue);
-					} else if ("javax.ws.rs.Consumes".equals(annotation.getTypeName())) {
+					} else if (Consumes.class.getName().equals(annotation.getTypeName())) {
 						met.setConsumes(myValue);
-					} else if ("javax.ws.rs.Produces".equals(annotation.getTypeName())) {
+					} else if (Produces.class.getName().equals(annotation.getTypeName())) {
 						met.setProduces(myValue);
-					} else if ("javax.ws.rs.GET".equals(annotation.getTypeName())) {
+					} else if (GET.class.getName().equals(annotation.getTypeName())) {
 						met.setRequestMethod(ResourceMethod.RequestMethod.GET);
-					} else if ("javax.ws.rs.POST".equals(annotation.getTypeName())) {
+					} else if (POST.class.getName().equals(annotation.getTypeName())) {
 						met.setRequestMethod(ResourceMethod.RequestMethod.POST);
-					} else if ("javax.ws.rs.PUT".equals(annotation.getTypeName())) {
+					} else if (PUT.class.getName().equals(annotation.getTypeName())) {
 						met.setRequestMethod(ResourceMethod.RequestMethod.PUT);
-					} else if ("javax.ws.rs.DELETE".equals(annotation.getTypeName())) {
+					} else if (DELETE.class.getName().equals(annotation.getTypeName())) {
 						met.setRequestMethod(ResourceMethod.RequestMethod.DELETE);
-					} else if (annotation.getTypeName().indexOf(".apljax.annotation.Comment") > 0) {
+					} else if (Comment.class.getName().equals(annotation.getTypeName())) {
 						met.setComment(myValue);
+					} else if (ResourceId.class.getName().equals(annotation.getTypeName())) {
+						met.setResourceId(myValue);
+					} else if (DefaultPath.class.getName().equals(annotation.getTypeName())) {
+						met.setDefaultPath(myValue);
 					}
 
     				log.debug("Discovered Method[{}.{} ({})] with Annotation({} value={})",
@@ -313,7 +325,9 @@ public class Scanner {
                 POST.class.getName(),
                 PUT.class.getName(),
                 DELETE.class.getName(),
-                Comment.class.getName()
+                Comment.class.getName(),
+                DefaultPath.class.getName(),
+                ResourceId.class.getName()
 			};
 		}
 	}
@@ -351,27 +365,27 @@ public class Scanner {
 					if (param.getMethodParameter() == null)
 						param.setMethodParameter(methodParameter);
 
-					if ("javax.ws.rs.PathParam".equals(annotation.getTypeName())) {
+					if (PathParam.class.getName().equals(annotation.getTypeName())) {
 						param.setType(ResourceParameter.ParameterType.PATH);
 						param.setName(myValue);
-					} else if ("javax.ws.rs.QueryParam".equals(annotation.getTypeName())) {
+					} else if (QueryParam.class.getName().equals(annotation.getTypeName())) {
 						param.setType(ResourceParameter.ParameterType.QUERY);
 						param.setName(myValue);
-					} else if ("javax.ws.rs.MatrixParam".equals(annotation.getTypeName())) {
+					} else if (MatrixParam.class.getName().equals(annotation.getTypeName())) {
 						param.setType(ResourceParameter.ParameterType.MATRIX);
 						param.setName(myValue);
-					} else if ("javax.ws.rs.HeaderParam".equals(annotation.getTypeName())) {
+					} else if (HeaderParam.class.getName().equals(annotation.getTypeName())) {
 						param.setType(ResourceParameter.ParameterType.HEADER);
 						param.setName(myValue);
-					} else if ("javax.ws.rs.CookieParam".equals(annotation.getTypeName())) {
+					} else if (CookieParam.class.getName().equals(annotation.getTypeName())) {
 						param.setType(ResourceParameter.ParameterType.COOKIE);
 						param.setName(myValue);
-					} else if ("javax.ws.rs.FormParam".equals(annotation.getTypeName())) {
+					} else if (FormParam.class.getName().equals(annotation.getTypeName())) {
 						param.setType(ResourceParameter.ParameterType.FORM);
 						param.setName(myValue);
-					} else if ("javax.ws.rs.DefaultValue".equals(annotation.getTypeName())) {
+					} else if (DefaultValue.class.getName().equals(annotation.getTypeName())) {
 						param.setDefaultValue(myValue);
-					} else if (annotation.getTypeName().indexOf(".apljax.annotation.Comment") > 0) {
+					} else if (Comment.class.getName().equals(annotation.getTypeName())) {
 						param.setComment(myValue);
 					}
 
