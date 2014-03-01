@@ -21,7 +21,6 @@ public class DumpResources {
 
 	@Test
 	public void test() {
-		log.info("test info message");
 
 		Scanner  scanner=new Scanner();
 		Resources resources=scanner.scan();

@@ -1,7 +1,9 @@
 package com.github.apljax.resource;
 
 import java.util.TreeMap;
-import java.util.TreeSet;
+
+import com.github.apljax.util.PathBuilder;
+import com.github.apljax.util.ResourceIdExtractor;
 
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.FieldInfo;
@@ -21,10 +23,12 @@ public class ResourceClass {
 	private String produces=null;
 	private String consumes=null;
 	private String comment=null;
-	private String resourceId=null;
+	private String definedResourceId=null;
 	private String defaultPath=null;
 	private TreeMap<String,ResourceField> resourceFields=null;
 	private TreeMap<String,ResourceMethod> resourceMethods=null;
+	private PathBuilder pathBuilder=null;
+	private ResourceIdExtractor resourceIdExtractor=null;
 
 	public ResourceClass(Resources r, ClassFile cf) {
 		super();
@@ -50,11 +54,37 @@ public class ResourceClass {
 		return defaultPath;
 	}
 
-	public String getFullPath() {
-		String ret=null;
-		// todo: code it, see util.PathTools
-		return ret;
+	public PathBuilder getPathBuilder() {
+		if (pathBuilder == null) {
+			pathBuilder=new PathBuilder().
+					setRootPath(resources.getRootUrl()).
+					setClassDefaultPath(defaultPath).
+					setClassPath(path);
+		}
+		return pathBuilder;
+	}
 
+	private ResourceIdExtractor getResourceIdExtractor() {
+		if (resourceIdExtractor == null) {
+			resourceIdExtractor=new ResourceIdExtractor(
+					getDefinedResourceId(),
+					getPathBuilder()
+				);
+		}
+		return resourceIdExtractor;
+	}
+
+	public String getResourceId() {
+		return getResourceIdExtractor().extract();
+	}
+
+	/**
+	 * Return the full path from PathBuilder
+	 *
+	 * @return full path to this resource as a String
+	 */
+	public String getFullPath() {
+		return getPathBuilder().build();
 	}
 
 	public String getPath() {
@@ -85,8 +115,8 @@ public class ResourceClass {
 		return resourceFields;
 	}
 
-	public String getResourceId() {
-		return resourceId;
+	public String getDefinedResourceId() {
+		return definedResourceId;
 	}
 
 	/**
@@ -109,10 +139,10 @@ public class ResourceClass {
 		return resourceMethods;
 	}
 
+
 	public Resources getResources() {
 		return resources;
 	}
-
 
 	/**
 	 * Create a new Resource field
@@ -155,8 +185,8 @@ public class ResourceClass {
 		return this;
 	}
 
-	public ResourceClass setResourceId(String resourceId) {
-		this.resourceId = resourceId;
+	public ResourceClass setDefinedResourceId(String resourceId) {
+		this.definedResourceId = resourceId;
 		return this;
 	}
 

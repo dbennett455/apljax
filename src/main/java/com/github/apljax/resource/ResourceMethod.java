@@ -2,6 +2,9 @@ package com.github.apljax.resource;
 
 import java.util.TreeMap;
 
+import com.github.apljax.util.PathBuilder;
+import com.github.apljax.util.ResourceIdExtractor;
+
 import javassist.bytecode.FieldInfo;
 import javassist.bytecode.MethodInfo;
 
@@ -18,9 +21,11 @@ public class ResourceMethod {
 	private String consumes=null;
 	private String produces=null;
 	private String comment=null;
-	private String resourceId=null;
+	private String definedResourceId=null;
 	private String defaultPath=null;
 	private TreeMap<Integer, ResourceParameter> resourceParameters=null;
+	private PathBuilder pathBuilder=null;
+	private ResourceIdExtractor resourceIdExtractor=null;
 
 	public ResourceMethod(ResourceClass cls, MethodInfo met) {
 		super();
@@ -41,6 +46,20 @@ public class ResourceMethod {
 		return defaultPath;
 	}
 
+
+	public String getDefinedResourceId() {
+		return definedResourceId;
+	}
+
+	/**
+	 * Return the full path from PathBuilder
+	 *
+	 * @return full path to this resource as a String
+	 */
+	public String getFullPath() {
+		return getPathBuilder().build();
+	}
+
 	public MethodInfo getMethodInfo() {
 		return methodInfo;
 	}
@@ -53,6 +72,18 @@ public class ResourceMethod {
 		return path;
 	}
 
+	private PathBuilder getPathBuilder() {
+		if (pathBuilder == null) {
+			pathBuilder=new PathBuilder().
+					setRootPath(myClass.getResources().getRootUrl()).
+					setClassDefaultPath(myClass.getDefaultPath()).
+					setClassPath(myClass.getPath()).
+					setMethodDefaultPath(defaultPath).
+					setMethodPath(path);
+		}
+		return pathBuilder;
+	}
+
 	public String getProduces() {
 		return produces;
 	}
@@ -62,7 +93,17 @@ public class ResourceMethod {
 	}
 
 	public String getResourceId() {
-		return resourceId;
+		return getResourceIdExtractor().extract();
+	}
+
+	private ResourceIdExtractor getResourceIdExtractor() {
+		if (resourceIdExtractor == null) {
+			resourceIdExtractor=new ResourceIdExtractor(
+					getDefinedResourceId(),
+					getPathBuilder()
+				);
+		}
+		return resourceIdExtractor;
 	}
 
 	/**
@@ -99,6 +140,11 @@ public class ResourceMethod {
 		return this;
 	}
 
+	public ResourceMethod setDefinedResourceId(String resourceId) {
+		this.definedResourceId = resourceId;
+		return this;
+	}
+
 	public ResourceMethod setPath(String path) {
 		this.path = path;
 		return this;
@@ -113,11 +159,5 @@ public class ResourceMethod {
 		this.requestMethod = requestMethod;
 		return this;
 	}
-
-	public ResourceMethod setResourceId(String resourceId) {
-		this.resourceId = resourceId;
-		return this;
-	}
-
 
 }
