@@ -1,5 +1,6 @@
 package com.github.apljax.util;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
@@ -12,6 +13,10 @@ public class PathBuilder extends Object {
     private final static Logger log=LoggerFactory.getLogger(PathBuilder.class);
 	private static final Pattern trimPath=Pattern.compile("(^[/\\s\"]+)|([/\\s\"]+$)");
 	private static final Pattern deQuote=Pattern.compile("(^[\\s\"]+)|([\\s\"]+$)");
+	// these are for matching 'simple or' alias paths like {a:path_one|path_two}
+	private static final String name="([a-z\\d_][a-z\\d_\\-\\.]*)";
+	private static final String path="([a-z\\d_][a-z\\d_\\-]*)";
+	public static final Pattern simpleOrAlias=Pattern.compile("\\{"+name+":"+path+"(\\|"+path+")*\\}",Pattern.CASE_INSENSITIVE);
 
 	/**
 	 * Remove quotes from an annotation value
@@ -36,6 +41,13 @@ public class PathBuilder extends Object {
 		String ret=null;
 		if (pth != null) {
 			ret = trimPath.matcher(pth).replaceAll("");
+			// if we find a 'simple or' alias path
+			// like {a:path_one|path_two} then
+			// use the first match as path component
+			Matcher m=simpleOrAlias.matcher(pth);
+			if (m.find()) {
+				ret=m.group(2);
+			}
 		}
 		return ret;
 	}

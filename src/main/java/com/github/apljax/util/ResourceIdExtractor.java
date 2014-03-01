@@ -40,11 +40,19 @@ public class ResourceIdExtractor {
 		} else {
 			String pth=getPathBuilder().buildNoRoot();
 			if (pth != null && pth.length() > 0 && !pth.equals("/")) {
-				Matcher m=resourceFromPath.matcher(pth);
-				if (m.find())
-					ret=m.group(1);
-				else
-					ret=pth;
+				// if we find a 'simple or' alias path
+				// like {a:path_one|path_two} then
+				// return the first match
+				Matcher m=PathBuilder.simpleOrAlias.matcher(pth);
+				if (m.find()) {
+					ret=m.group(2);
+				} else {
+    				m=resourceFromPath.matcher(pth);
+    				if (m.find())
+    					ret=m.group(1);
+    				else
+    					ret=pth;
+				}
 			}
 		}
 		return ret;
