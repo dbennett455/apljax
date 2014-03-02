@@ -26,41 +26,41 @@ public class DumpResources {
 		for (String className : resourceClasses.keySet()) {
 			ResourceClass rc=resourceClasses.get(className);
 			// output class info
-			System.out.print(className);
-			System.out.print(",path:"+rc.getPath());
-			System.out.println("");
+			System.out.println(className);
+			System.out.println("\tpath:"+rc.getResourcePath());
+			System.out.println("\tconsumes:"+rc.getConsumes());
+			System.out.println("\tproduces:"+rc.getProduces());
 			// iterate through fields
 			TreeMap<String,ResourceField> resourceFields=rc.getResourceFields();
 			for (String fieldName : resourceFields.keySet()) {
 				ResourceField rf=resourceFields.get(fieldName);
 				// output field info
-				System.out.print("\tfield:"+rf.getFieldInfo().getName());
-				System.out.print(",name:" + rf.getName());
-				System.out.print(",data type:"+rf.getJavaType());
-				System.out.print(",req type:"+rf.getRequestType());
-				System.out.print(",default value:"+rf.getDefaultValue());
-				System.out.println("");
+				System.out.println("\t\tfield:"+rf.getFieldInfo().getName());
+				System.out.println("\t\t\tname:" + rf.getName());
+				System.out.println("\t\t\tdata type:"+rf.getJavaType());
+				System.out.println("\t\t\treq type:"+rf.getRequestType());
+				System.out.println("\t\t\tdefault value:"+rf.getDefaultValue());
 			}
 			// iterate through methods
 			TreeMap<String,ResourceMethod> resourceMethods=rc.getResourceMethods();
 			for (String methodName : resourceMethods.keySet()) {
 				ResourceMethod rm=resourceMethods.get(methodName);
 				// output method info
-				System.out.print("\tmethod:"+rm.getMethodInfo().getName());
-				System.out.print(",path:" + rm.getPath());
-				System.out.print(",req type:"+rm.getRequestMethod());
-				System.out.println("");
+				System.out.println("\t\tmethod:"+rm.getMethodInfo().getName());
+				System.out.println("\t\t\tpath:" + rm.getResourcePath());
+				System.out.println("\t\t\treq type:"+rm.getRequestMethod());
+				System.out.println("\t\t\tconsumes:"+rm.getConsumes());
+				System.out.println("\t\t\tproduces:"+rm.getProduces());
 				// iterate through parameters
 				TreeMap<Integer,ResourceParameter> resourceParameters=rm.getResourceParameters();
 				for (Integer paramIndex : resourceParameters.keySet()) {
 					ResourceParameter rp=resourceParameters.get(paramIndex);
 					// output parameter info
-					System.out.print("\t\t"+rp.getName());
-					System.out.print(",index:"+paramIndex);
-					System.out.print(",data type:"+rp.getMethodParameter().getType());
-					System.out.print(",req type:"+rp.getType());
-					System.out.print(",default value:"+rp.getDefaultValue());
-					System.out.println("");
+					System.out.println("\t\t\tparameter:"+rp.getName());
+					System.out.println("\t\t\t\tindex:"+paramIndex);
+					System.out.println("\t\t\t\tdata type:"+rp.getMethodParameter().getType());
+					System.out.println("\t\t\t\treq type:"+rp.getType());
+					System.out.println("\t\t\t\tdefault value:"+rp.getDefaultValue());
 				}
 			}
 		}

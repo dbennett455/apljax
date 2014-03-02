@@ -37,7 +37,14 @@ public class ResourceMethod {
 		return comment;
 	}
 
+	/**
+	 * Delegate to class if not defined
+	 *
+	 * @return String comment
+	 */
 	public String getConsumes() {
+		if (consumes == null)
+			return(myClass.getConsumes());
 		return consumes;
 	}
 
@@ -73,7 +80,7 @@ public class ResourceMethod {
 
 	private PathBuilder getPathBuilder() {
 		if (pathBuilder == null) {
-			pathBuilder=new PathBuilder().
+			pathBuilder = new PathBuilder().
 					setRootPath(myClass.getResources().getRootUrl()).
 					setClassDefaultPath(myClass.getDefaultPath()).
 					setClassPath(myClass.getPath()).
@@ -84,6 +91,8 @@ public class ResourceMethod {
 	}
 
 	public String getProduces() {
+		if (produces == null)
+			return(myClass.getProduces());
 		return produces;
 	}
 
@@ -122,6 +131,15 @@ public class ResourceMethod {
 
 	public TreeMap<Integer, ResourceParameter> getResourceParameters() {
 		return resourceParameters;
+	}
+
+	/**
+	 * Get the relative path to this resource method
+	 *
+	 * @return
+	 */
+	public String getResourcePath() {
+		return getPathBuilder().buildNoRoot();
 	}
 
 	public ResourceMethod setComment(String comment) {

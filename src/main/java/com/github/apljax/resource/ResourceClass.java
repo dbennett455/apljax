@@ -2,6 +2,9 @@ package com.github.apljax.resource;
 
 import java.util.TreeMap;
 
+import javax.activation.MimeType;
+import javax.ws.rs.core.MediaType;
+
 import com.github.apljax.util.PathBuilder;
 import com.github.apljax.util.ResourceIdExtractor;
 
@@ -46,7 +49,14 @@ public class ResourceClass {
 		return comment;
 	}
 
+	/**
+	 * Delegate to default if not provided
+	 *
+	 * @return String consumes media type
+	 */
 	public String getConsumes() {
+		if (consumes == null)
+			return(MediaType.WILDCARD);
 		return consumes;
 	}
 
@@ -54,28 +64,8 @@ public class ResourceClass {
 		return defaultPath;
 	}
 
-	public PathBuilder getPathBuilder() {
-		if (pathBuilder == null) {
-			pathBuilder=new PathBuilder().
-					setRootPath(resources.getRootUrl()).
-					setClassDefaultPath(defaultPath).
-					setClassPath(path);
-		}
-		return pathBuilder;
-	}
-
-	private ResourceIdExtractor getResourceIdExtractor() {
-		if (resourceIdExtractor == null) {
-			resourceIdExtractor=new ResourceIdExtractor(
-					getDefinedResourceId(),
-					getPathBuilder()
-				);
-		}
-		return resourceIdExtractor;
-	}
-
-	public String getResourceId() {
-		return getResourceIdExtractor().extract();
+	public String getDefinedResourceId() {
+		return definedResourceId;
 	}
 
 	/**
@@ -91,7 +81,19 @@ public class ResourceClass {
 		return path;
 	}
 
+	public PathBuilder getPathBuilder() {
+		if (pathBuilder == null) {
+			pathBuilder=new PathBuilder().
+					setRootPath(resources.getRootUrl()).
+					setClassDefaultPath(defaultPath).
+					setClassPath(path);
+		}
+		return pathBuilder;
+	}
+
 	public String getProduces() {
+		if (produces == null)
+			return(MediaType.WILDCARD);
 		return produces;
 	}
 
@@ -115,8 +117,18 @@ public class ResourceClass {
 		return resourceFields;
 	}
 
-	public String getDefinedResourceId() {
-		return definedResourceId;
+	public String getResourceId() {
+		return getResourceIdExtractor().extract();
+	}
+
+	private ResourceIdExtractor getResourceIdExtractor() {
+		if (resourceIdExtractor == null) {
+			resourceIdExtractor=new ResourceIdExtractor(
+					getDefinedResourceId(),
+					getPathBuilder()
+				);
+		}
+		return resourceIdExtractor;
 	}
 
 	/**
@@ -137,6 +149,15 @@ public class ResourceClass {
 
 	public TreeMap<String,ResourceMethod> getResourceMethods() {
 		return resourceMethods;
+	}
+
+	/**
+	 * App relative path
+	 *
+	 * @return String path
+	 */
+	public String getResourcePath() {
+		return getPathBuilder().buildNoRoot();
 	}
 
 
@@ -175,6 +196,11 @@ public class ResourceClass {
 		return this;
 	}
 
+	public ResourceClass setDefinedResourceId(String resourceId) {
+		this.definedResourceId = resourceId;
+		return this;
+	}
+
 	public ResourceClass setPath(String path) {
 		this.path = path;
 		return this;
@@ -182,11 +208,6 @@ public class ResourceClass {
 
 	public ResourceClass setProduces(String produces) {
 		this.produces = produces;
-		return this;
-	}
-
-	public ResourceClass setDefinedResourceId(String resourceId) {
-		this.definedResourceId = resourceId;
 		return this;
 	}
 

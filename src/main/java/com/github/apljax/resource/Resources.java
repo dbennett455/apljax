@@ -13,19 +13,6 @@ public class Resources {
 		resources=new TreeMap<String, ResourceClass>();
 	}
 
-	public String getRootUrl() {
-		return rootUrl;
-	}
-
-	public Resources setRootUrl(String rootUrl) {
-		this.rootUrl = rootUrl;
-		return this;
-	}
-
-	public TreeMap<String, ResourceClass> getResources() {
-		return resources;
-	}
-
 	/**
 	 * get or create a ResourceClass for a given path
 	 *
@@ -42,6 +29,14 @@ public class Resources {
 		return ret;
 	}
 
+	public TreeMap<String, ResourceClass> getResources() {
+		return resources;
+	}
+
+	public String getRootUrl() {
+		return rootUrl;
+	}
+
 	/**
 	 * This method returns a new ResourceClass so you can overload
 	 *
@@ -51,6 +46,11 @@ public class Resources {
 	 */
 	public ResourceClass newResourceClass(ClassFile cf) {
 		return new ResourceClass(this,cf);
+	}
+
+	public Resources setRootUrl(String rootUrl) {
+		this.rootUrl = rootUrl;
+		return this;
 	}
 
 }
