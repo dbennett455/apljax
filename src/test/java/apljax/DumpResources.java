@@ -2,6 +2,7 @@ package apljax;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.TreeMap;
 
 import org.junit.Test;
@@ -28,8 +29,8 @@ public class DumpResources {
 			// output class info
 			System.out.println(className);
 			System.out.println("\tpath:"+rc.getResourcePath());
-			System.out.println("\tconsumes:"+rc.getConsumes());
-			System.out.println("\tproduces:"+rc.getProduces());
+			System.out.println("\tconsumes:"+Arrays.toString(rc.getConsumes()));
+			System.out.println("\tproduces:"+Arrays.toString(rc.getProduces()));
 			// iterate through fields
 			TreeMap<String,ResourceField> resourceFields=rc.getResourceFields();
 			for (String fieldName : resourceFields.keySet()) {
@@ -49,8 +50,8 @@ public class DumpResources {
 				System.out.println("\t\tmethod:"+rm.getMethodInfo().getName());
 				System.out.println("\t\t\tpath:" + rm.getResourcePath());
 				System.out.println("\t\t\treq type:"+rm.getRequestMethod());
-				System.out.println("\t\t\tconsumes:"+rm.getConsumes());
-				System.out.println("\t\t\tproduces:"+rm.getProduces());
+				System.out.println("\t\t\tconsumes:"+Arrays.toString(rm.getConsumes()));
+				System.out.println("\t\t\tproduces:"+Arrays.toString(rm.getProduces()));
 				// iterate through parameters
 				TreeMap<Integer,ResourceParameter> resourceParameters=rm.getResourceParameters();
 				for (Integer paramIndex : resourceParameters.keySet()) {

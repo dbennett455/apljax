@@ -1,8 +1,8 @@
 package com.github.apljax.resource;
 
+import java.util.Arrays;
 import java.util.TreeMap;
 
-import javax.activation.MimeType;
 import javax.ws.rs.core.MediaType;
 
 import com.github.apljax.util.PathBuilder;
@@ -23,8 +23,8 @@ public class ResourceClass {
 	private Resources resources=null;
 	private ClassFile classFile=null;
 	private String path=null;
-	private String produces=null;
-	private String consumes=null;
+	private String[] produces=null;
+	private String[] consumes=null;
 	private String comment=null;
 	private String definedResourceId=null;
 	private String defaultPath=null;
@@ -54,9 +54,11 @@ public class ResourceClass {
 	 *
 	 * @return String consumes media type
 	 */
-	public String getConsumes() {
+	public String[] getConsumes() {
 		if (consumes == null)
-			return(MediaType.WILDCARD);
+			return(
+				Arrays.asList(MediaType.WILDCARD).toArray(new String[1])
+			);
 		return consumes;
 	}
 
@@ -91,9 +93,11 @@ public class ResourceClass {
 		return pathBuilder;
 	}
 
-	public String getProduces() {
+	public String[] getProduces() {
 		if (produces == null)
-			return(MediaType.WILDCARD);
+			return(
+					Arrays.asList(MediaType.WILDCARD).toArray(new String[1])
+				);
 		return produces;
 	}
 
@@ -186,7 +190,7 @@ public class ResourceClass {
 		return this;
 	}
 
-	public ResourceClass setConsumes(String consumes) {
+	public ResourceClass setConsumes(String[] consumes) {
 		this.consumes = consumes;
 		return this;
 	}
@@ -206,7 +210,7 @@ public class ResourceClass {
 		return this;
 	}
 
-	public ResourceClass setProduces(String produces) {
+	public ResourceClass setProduces(String[] produces) {
 		this.produces = produces;
 		return this;
 	}

@@ -17,8 +17,8 @@ public class ResourceMethod {
 	private MethodInfo methodInfo=null;
 	private RequestMethod requestMethod=RequestMethod.GET;
 	private String path=null;
-	private String consumes=null;
-	private String produces=null;
+	private String[] consumes=null;
+	private String[] produces=null;
 	private String comment=null;
 	private String definedResourceId=null;
 	private String defaultPath=null;
@@ -42,7 +42,7 @@ public class ResourceMethod {
 	 *
 	 * @return String comment
 	 */
-	public String getConsumes() {
+	public String[] getConsumes() {
 		if (consumes == null)
 			return(myClass.getConsumes());
 		return consumes;
@@ -90,7 +90,7 @@ public class ResourceMethod {
 		return pathBuilder;
 	}
 
-	public String getProduces() {
+	public String[] getProduces() {
 		if (produces == null)
 			return(myClass.getProduces());
 		return produces;
@@ -147,7 +147,7 @@ public class ResourceMethod {
 		return this;
 	}
 
-	public ResourceMethod setConsumes(String consumes) {
+	public ResourceMethod setConsumes(String[] consumes) {
 		this.consumes = consumes;
 		return this;
 	}
@@ -167,7 +167,7 @@ public class ResourceMethod {
 		return this;
 	}
 
-	public ResourceMethod setProduces(String produces) {
+	public ResourceMethod setProduces(String[] produces) {
 		this.produces = produces;
 		return this;
 	}

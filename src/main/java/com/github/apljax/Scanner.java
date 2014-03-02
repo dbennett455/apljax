@@ -1,5 +1,6 @@
 package com.github.apljax;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -28,7 +29,9 @@ import javassist.bytecode.ClassFile;
 import javassist.bytecode.FieldInfo;
 import javassist.bytecode.MethodInfo;
 import javassist.bytecode.annotation.Annotation;
+import javassist.bytecode.annotation.ArrayMemberValue;
 import javassist.bytecode.annotation.MemberValue;
+import javassist.bytecode.annotation.StringMemberValue;
 
 import com.github.apljax.annotation.Comment;
 import com.github.apljax.annotation.DefaultPath;
@@ -131,11 +134,9 @@ public class Scanner {
 
 				if (annotation != null && annotation.getTypeName() != null) {
 
-					// get annotation value
-					MemberValue myParamVal=annotation.getMemberValue("value");
-					String myValue=null;
-					if (myParamVal != null)
-						myValue=myParamVal.toString();
+					AnnotationValue av=new AnnotationValue(annotation);
+					String myValue=av.myValue;
+					String[] myArrayValue=av.myArrayValue;
 
 					// get or add class
 					ResourceClass cls=resources.getResourceClass(clazz);
@@ -143,9 +144,9 @@ public class Scanner {
 					if (Path.class.getName().equals(annotation.getTypeName())) {
 						cls.setPath(myValue);
 					} else if (Consumes.class.getName().equals(annotation.getTypeName())) {
-						cls.setConsumes(myValue);
+						cls.setConsumes(myArrayValue);
 					} else if (Produces.class.getName().equals(annotation.getTypeName())) {
-						cls.setProduces(myValue);
+						cls.setProduces(myArrayValue);
 					} else if (Comment.class.getName().equals(annotation.getTypeName())) {
 						cls.setComment(myValue);
 					} else if (ResourceId.class.getName().equals(annotation.getTypeName())) {
@@ -195,10 +196,8 @@ public class Scanner {
 				if (annotation != null && annotation.getTypeName() != null) {
 
 					// get annotation value
-					MemberValue myParamVal=annotation.getMemberValue("value");
-					String myValue=null;
-					if (myParamVal != null)
-						myValue=myParamVal.toString();
+					AnnotationValue av=new AnnotationValue(annotation);
+					String myValue=av.myValue;
 
 					// get or add method parameter
 					ResourceClass cls=resources.getResourceClass(clazz);
@@ -238,7 +237,7 @@ public class Scanner {
 					}
 
        				log.debug("Discovered Field in Class {} name: {} type:{} with Annotation({} value={})",
-       						clazz.getName(), field.getName(), fld.getJavaType(), annotation.getTypeName(), myParamVal);
+       						clazz.getName(), field.getName(), fld.getJavaType(), annotation.getTypeName(), myValue);
 				}
 			}
 		}
@@ -277,10 +276,9 @@ public class Scanner {
 				if (annotation != null && annotation.getTypeName() != null) {
 
 					// get annotation value
-					MemberValue myParamVal=annotation.getMemberValue("value");
-					String myValue=null;
-					if (myParamVal != null)
-						myValue=myParamVal.toString();
+					AnnotationValue av=new AnnotationValue(annotation);
+					String myValue=av.myValue;
+					String[] myArrayValue=av.myArrayValue;
 
 					// get or add class
 					ResourceClass cls=resources.getResourceClass(clazz);
@@ -289,9 +287,9 @@ public class Scanner {
 					if (Path.class.getName().equals(annotation.getTypeName())) {
 						met.setPath(myValue);
 					} else if (Consumes.class.getName().equals(annotation.getTypeName())) {
-						met.setConsumes(myValue);
+						met.setConsumes(myArrayValue);
 					} else if (Produces.class.getName().equals(annotation.getTypeName())) {
-						met.setProduces(myValue);
+						met.setProduces(myArrayValue);
 					} else if (GET.class.getName().equals(annotation.getTypeName())) {
 						met.setRequestMethod(ResourceMethod.RequestMethod.GET);
 					} else if (POST.class.getName().equals(annotation.getTypeName())) {
@@ -353,10 +351,8 @@ public class Scanner {
 				if (annotation != null && annotation.getTypeName() != null) {
 
 					// get annotation value
-					MemberValue myParamVal=annotation.getMemberValue("value");
-					String myValue=null;
-					if (myParamVal != null)
-						myValue=myParamVal.toString();
+					AnnotationValue av=new AnnotationValue(annotation);
+					String myValue=av.myValue;
 
 					// get or add method parameter
 					ResourceClass cls=resources.getResourceClass(clazz);
@@ -409,4 +405,44 @@ public class Scanner {
 			};
 		}
 	}
+
+	/**
+	 * Decode annotation value
+	 *
+	 * @author root
+	 */
+	static class AnnotationValue {
+
+		String myValue=null;
+		String[] myArrayValue=null;
+
+		AnnotationValue(Annotation annotation) {
+			// get annotation value
+			MemberValue myParamVal=annotation.getMemberValue("value");
+			if (myParamVal != null) {
+				if (myParamVal.getClass().getName().equals(StringMemberValue.class.getName())) {
+					StringMemberValue smv=(StringMemberValue)myParamVal;
+					myValue=smv.getValue();
+				}
+				else if (myParamVal != null && myParamVal.getClass().getName().equals(ArrayMemberValue.class.getName())) {
+					ArrayMemberValue amv=(ArrayMemberValue)myParamVal;
+					MemberValue[] mva=amv.getValue();
+					ArrayList<String> als=new ArrayList<String>();
+					for (MemberValue mv : mva) {
+						if (mv.getClass().getName().equals(StringMemberValue.class.getName())) {
+							StringMemberValue smv=(StringMemberValue)mv;
+							als.add(smv.getValue());
+						} else {
+							als.add(mv.toString());
+						}
+					}
+					myArrayValue=als.toArray(new String[als.size()]);
+				} else {
+					myValue=myParamVal.toString();
+				}
+			}
+		}
+
+	}
+
 }
