@@ -1,4 +1,4 @@
-package com.github.apljax;
+package com.github.apljax.process;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,12 +37,14 @@ import com.github.apljax.annotation.Comment;
 import com.github.apljax.annotation.DefaultPath;
 import com.github.apljax.annotation.ResourceId;
 import com.github.apljax.discover.AJDiscoverer;
-import com.github.apljax.resource.ResourceClass;
-import com.github.apljax.resource.ResourceField;
-import com.github.apljax.resource.ResourceMethod;
-import com.github.apljax.resource.ResourceParameter;
-import com.github.apljax.resource.Resources;
+import com.github.apljax.resource.JavaClass;
+import com.github.apljax.resource.JavaField;
+import com.github.apljax.resource.JavaMethod;
+import com.github.apljax.resource.JavaMethodParameter;
+import com.github.apljax.resource.JavaResources;
 import com.github.apljax.util.AJProperties;
+import com.github.apljax.util.Enum.RequestMethod;
+import com.github.apljax.util.Enum.RequestType;
 import com.impetus.annovention.Discoverer;
 import com.impetus.annovention.listener.ClassAnnotationObjectDiscoveryListener;
 import com.impetus.annovention.listener.FieldAnnotationObjectDiscoveryListener;
@@ -55,10 +57,10 @@ public class Scanner {
 
     private final static Logger log=LoggerFactory.getLogger(Scanner.class);
     private static Pattern classNameMatching=null;
-	private Resources resources=new Resources();
+	private JavaResources resources=new JavaResources();
 
 	public Scanner() {
-		resources=new Resources();
+		resources=new JavaResources();
         // create the classNameMatching property and build a regular expression pattern
         // in the format .*({className}|...).*
         if (classNameMatching == null && AJProperties.getProperties().getProperty("classNameMatching") != null) {
@@ -79,10 +81,9 @@ public class Scanner {
         		log.error("Invalid match expression in classNameMatching: {}",sbCpm.toString());
         	}
         }
-
 	}
 
-	public Resources scan() {
+	public JavaResources scan() {
 		Discoverer discoverer = new AJDiscoverer();
 		discoverer.addAnnotationListener(new MyClassAnnotationListener(resources));
 		discoverer.addAnnotationListener(new MyFieldAnnotationListener(resources));
@@ -121,9 +122,9 @@ public class Scanner {
 	 */
 	static class MyClassAnnotationListener implements ClassAnnotationObjectDiscoveryListener {
 
-		private Resources resources;
+		private JavaResources resources;
 
-		public MyClassAnnotationListener(Resources resources) {
+		public MyClassAnnotationListener(JavaResources resources) {
 			super();
 			this.resources = resources;
 		}
@@ -139,7 +140,7 @@ public class Scanner {
 					String[] myArrayValue=av.myArrayValue;
 
 					// get or add class
-					ResourceClass cls=resources.getResourceClass(clazz);
+					JavaClass cls=resources.getResourceClass(clazz);
 
 					if (Path.class.getName().equals(annotation.getTypeName())) {
 						cls.setPath(myValue);
@@ -182,9 +183,9 @@ public class Scanner {
 	 */
 	static class MyFieldAnnotationListener implements FieldAnnotationObjectDiscoveryListener {
 
-		private Resources resources;
+		private JavaResources resources;
 
-		public MyFieldAnnotationListener(Resources resources) {
+		public MyFieldAnnotationListener(JavaResources resources) {
 			super();
 			this.resources = resources;
 		}
@@ -200,26 +201,26 @@ public class Scanner {
 					String myValue=av.myValue;
 
 					// get or add method parameter
-					ResourceClass cls=resources.getResourceClass(clazz);
-					ResourceField fld=cls.getResourceField(field);
+					JavaClass cls=resources.getResourceClass(clazz);
+					JavaField fld=cls.getResourceField(field);
 
 					if (PathParam.class.getName().equals(annotation.getTypeName())) {
-						fld.setRequestType(ResourceField.RequestType.PATH);
+						fld.setRequestType(RequestType.PATH);
 						fld.setName(myValue);
 					} else if (QueryParam.class.getName().equals(annotation.getTypeName())) {
-						fld.setRequestType(ResourceField.RequestType.QUERY);
+						fld.setRequestType(RequestType.QUERY);
 						fld.setName(myValue);
 					} else if (MatrixParam.class.getName().equals(annotation.getTypeName())) {
-						fld.setRequestType(ResourceField.RequestType.MATRIX);
+						fld.setRequestType(RequestType.MATRIX);
 						fld.setName(myValue);
 					} else if (HeaderParam.class.getName().equals(annotation.getTypeName())) {
-						fld.setRequestType(ResourceField.RequestType.HEADER);
+						fld.setRequestType(RequestType.HEADER);
 						fld.setName(myValue);
 					} else if (CookieParam.class.getName().equals(annotation.getTypeName())) {
-						fld.setRequestType(ResourceField.RequestType.COOKIE);
+						fld.setRequestType(RequestType.COOKIE);
 						fld.setName(myValue);
 					} else if (FormParam.class.getName().equals(annotation.getTypeName())) {
-						fld.setRequestType(ResourceField.RequestType.FORM);
+						fld.setRequestType(RequestType.FORM);
 						fld.setName(myValue);
 					} else if (DefaultValue.class.getName().equals(annotation.getTypeName())) {
 						fld.setDefaultValue(myValue);
@@ -262,9 +263,9 @@ public class Scanner {
 	 */
 	static class MyMethodAnnotationListener implements MethodAnnotationObjectDiscoveryListener {
 
-		private Resources resources;
+		private JavaResources resources;
 
-		public MyMethodAnnotationListener(Resources resources) {
+		public MyMethodAnnotationListener(JavaResources resources) {
 			super();
 			this.resources = resources;
 		}
@@ -281,8 +282,8 @@ public class Scanner {
 					String[] myArrayValue=av.myArrayValue;
 
 					// get or add class
-					ResourceClass cls=resources.getResourceClass(clazz);
-					ResourceMethod met=cls.getResourceMethod(method);
+					JavaClass cls=resources.getResourceClass(clazz);
+					JavaMethod met=cls.getResourceMethod(method);
 
 					if (Path.class.getName().equals(annotation.getTypeName())) {
 						met.setPath(myValue);
@@ -291,13 +292,13 @@ public class Scanner {
 					} else if (Produces.class.getName().equals(annotation.getTypeName())) {
 						met.setProduces(myArrayValue);
 					} else if (GET.class.getName().equals(annotation.getTypeName())) {
-						met.setRequestMethod(ResourceMethod.RequestMethod.GET);
+						met.setRequestMethod(RequestMethod.GET);
 					} else if (POST.class.getName().equals(annotation.getTypeName())) {
-						met.setRequestMethod(ResourceMethod.RequestMethod.POST);
+						met.setRequestMethod(RequestMethod.POST);
 					} else if (PUT.class.getName().equals(annotation.getTypeName())) {
-						met.setRequestMethod(ResourceMethod.RequestMethod.PUT);
+						met.setRequestMethod(RequestMethod.PUT);
 					} else if (DELETE.class.getName().equals(annotation.getTypeName())) {
-						met.setRequestMethod(ResourceMethod.RequestMethod.DELETE);
+						met.setRequestMethod(RequestMethod.DELETE);
 					} else if (Comment.class.getName().equals(annotation.getTypeName())) {
 						met.setComment(myValue);
 					} else if (ResourceId.class.getName().equals(annotation.getTypeName())) {
@@ -337,9 +338,9 @@ public class Scanner {
 	 */
 	static class MyMethodParameterAnnotationListener implements MethodParameterAnnotationObjectDiscoveryListener {
 
-		private Resources resources;
+		private JavaResources resources;
 
-		public MyMethodParameterAnnotationListener(Resources resources) {
+		public MyMethodParameterAnnotationListener(JavaResources resources) {
 			super();
 			this.resources = resources;
 		}
@@ -355,29 +356,30 @@ public class Scanner {
 					String myValue=av.myValue;
 
 					// get or add method parameter
-					ResourceClass cls=resources.getResourceClass(clazz);
-					ResourceMethod met=cls.getResourceMethod(method);
-					ResourceParameter param=met.getResourceParameter(new Integer(methodParameter.getIndex()));
+					JavaClass cls=resources.getResourceClass(clazz);
+					JavaMethod met=cls.getResourceMethod(method);
+					JavaMethodParameter param=met.getResourceParameter(new Integer(methodParameter.getIndex()));
 					if (param.getMethodParameter() == null)
 						param.setMethodParameter(methodParameter);
+						param.setJavaType(methodParameter.getType());
 
 					if (PathParam.class.getName().equals(annotation.getTypeName())) {
-						param.setType(ResourceParameter.ParameterType.PATH);
+						param.setType(RequestType.PATH);
 						param.setName(myValue);
 					} else if (QueryParam.class.getName().equals(annotation.getTypeName())) {
-						param.setType(ResourceParameter.ParameterType.QUERY);
+						param.setType(RequestType.QUERY);
 						param.setName(myValue);
 					} else if (MatrixParam.class.getName().equals(annotation.getTypeName())) {
-						param.setType(ResourceParameter.ParameterType.MATRIX);
+						param.setType(RequestType.MATRIX);
 						param.setName(myValue);
 					} else if (HeaderParam.class.getName().equals(annotation.getTypeName())) {
-						param.setType(ResourceParameter.ParameterType.HEADER);
+						param.setType(RequestType.HEADER);
 						param.setName(myValue);
 					} else if (CookieParam.class.getName().equals(annotation.getTypeName())) {
-						param.setType(ResourceParameter.ParameterType.COOKIE);
+						param.setType(RequestType.COOKIE);
 						param.setName(myValue);
 					} else if (FormParam.class.getName().equals(annotation.getTypeName())) {
-						param.setType(ResourceParameter.ParameterType.FORM);
+						param.setType(RequestType.FORM);
 						param.setName(myValue);
 					} else if (DefaultValue.class.getName().equals(annotation.getTypeName())) {
 						param.setDefaultValue(myValue);

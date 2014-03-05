@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.apljax.Scanner;
-import com.github.apljax.resource.Resources;
+import com.github.apljax.process.Scanner;
+import com.github.apljax.resource.JavaResources;
 
 public class TestScanner {
 
@@ -18,7 +18,7 @@ public class TestScanner {
 		log.info("test info message");
 
 		Scanner  scanner=new Scanner();
-		Resources resources=scanner.scan();
+		JavaResources resources=scanner.scan();
 		assertNotNull(resources);
 	}
 

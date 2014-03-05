@@ -6,10 +6,10 @@ import java.util.TreeMap;
 
 import org.junit.Test;
 
-import com.github.apljax.Scanner;
-import com.github.apljax.resource.ResourceClass;
-import com.github.apljax.resource.ResourceMethod;
-import com.github.apljax.resource.Resources;
+import com.github.apljax.process.Scanner;
+import com.github.apljax.resource.JavaClass;
+import com.github.apljax.resource.JavaMethod;
+import com.github.apljax.resource.JavaResources;
 
 public class DumpResourcePaths {
 
@@ -19,20 +19,20 @@ public class DumpResourcePaths {
 	public void test() {
 
 		Scanner  scanner=new Scanner();
-		Resources resources=scanner.scan();
+		JavaResources resources=scanner.scan();
 		resources.setRootUrl("http://localhost/app");
-		TreeMap<String,ResourceClass> resourceClasses=resources.getResources();
+		TreeMap<String,JavaClass> resourceClasses=resources.getResources();
 		for (String className : resourceClasses.keySet()) {
-			ResourceClass rc=resourceClasses.get(className);
+			JavaClass rc=resourceClasses.get(className);
 			// output class info
 			System.out.print("class:"+className);
 			System.out.print("\tresource:"+rc.getResourceId());
 			System.out.print("\tpath:"+rc.getFullPath());
 			System.out.println("");
 			// iterate through methods
-			TreeMap<String,ResourceMethod> resourceMethods=rc.getResourceMethods();
+			TreeMap<String,JavaMethod> resourceMethods=rc.getResourceMethods();
 			for (String methodName : resourceMethods.keySet()) {
-				ResourceMethod rm=resourceMethods.get(methodName);
+				JavaMethod rm=resourceMethods.get(methodName);
 				// output method info
 				System.out.print("\tmethod:"+rm.getMethodInfo().getName());
 				System.out.print("\t\tresource:"+rm.getResourceId());

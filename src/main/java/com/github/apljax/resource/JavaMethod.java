@@ -2,18 +2,16 @@ package com.github.apljax.resource;
 
 import java.util.TreeMap;
 
+import com.github.apljax.util.Enum.RequestMethod;
 import com.github.apljax.util.PathBuilder;
 import com.github.apljax.util.ResourceIdExtractor;
 
 import javassist.bytecode.MethodInfo;
 
 
-public class ResourceMethod {
+public class JavaMethod {
 
-	// JAX-RS http request types
-	public enum RequestMethod {GET,POST,PUT,DELETE,HEAD};
-
-	private ResourceClass myClass=null;
+	private JavaClass myClass=null;
 	private MethodInfo methodInfo=null;
 	private RequestMethod requestMethod=RequestMethod.GET;
 	private String path=null;
@@ -22,15 +20,15 @@ public class ResourceMethod {
 	private String comment=null;
 	private String definedResourceId=null;
 	private String defaultPath=null;
-	private TreeMap<Integer, ResourceParameter> resourceParameters=null;
+	private TreeMap<Integer, JavaMethodParameter> resourceParameters=null;
 	private PathBuilder pathBuilder=null;
 	private ResourceIdExtractor resourceIdExtractor=null;
 
-	public ResourceMethod(ResourceClass cls, MethodInfo met) {
+	public JavaMethod(JavaClass cls, MethodInfo met) {
 		super();
 		this.myClass = cls;
 		this.methodInfo = met;
-		this.resourceParameters=new TreeMap<Integer, ResourceParameter>();
+		this.resourceParameters=new TreeMap<Integer, JavaMethodParameter>();
 	}
 
 	public String getComment() {
@@ -70,7 +68,7 @@ public class ResourceMethod {
 		return methodInfo;
 	}
 
-	public ResourceClass getMyClass() {
+	public JavaClass getMyClass() {
 		return myClass;
 	}
 
@@ -115,21 +113,21 @@ public class ResourceMethod {
 	}
 
 	/**
-	 * get or create a ResourceParameter for a given name
+	 * get or create a JavaMethodParameter for a given name
 	 *
 	 * @param path
-	 * @return a ResourceMethod
+	 * @return a JavaMethod
 	 */
-	public ResourceParameter getResourceParameter(Integer index) {
-		ResourceParameter ret=this.resourceParameters.get(index);
+	public JavaMethodParameter getResourceParameter(Integer index) {
+		JavaMethodParameter ret=this.resourceParameters.get(index);
 		if (ret == null) {
-			ret=new ResourceParameter(this,index);
+			ret=new JavaMethodParameter(this,index);
 			this.resourceParameters.put(index, ret);
 		}
 		return ret;
 	}
 
-	public TreeMap<Integer, ResourceParameter> getResourceParameters() {
+	public TreeMap<Integer, JavaMethodParameter> getResourceParameters() {
 		return resourceParameters;
 	}
 
@@ -142,37 +140,37 @@ public class ResourceMethod {
 		return getPathBuilder().buildNoRoot();
 	}
 
-	public ResourceMethod setComment(String comment) {
+	public JavaMethod setComment(String comment) {
 		this.comment = comment;
 		return this;
 	}
 
-	public ResourceMethod setConsumes(String[] consumes) {
+	public JavaMethod setConsumes(String[] consumes) {
 		this.consumes = consumes;
 		return this;
 	}
 
-	public ResourceMethod setDefaultPath(String defaultPath) {
+	public JavaMethod setDefaultPath(String defaultPath) {
 		this.defaultPath = defaultPath;
 		return this;
 	}
 
-	public ResourceMethod setDefinedResourceId(String resourceId) {
+	public JavaMethod setDefinedResourceId(String resourceId) {
 		this.definedResourceId = resourceId;
 		return this;
 	}
 
-	public ResourceMethod setPath(String path) {
+	public JavaMethod setPath(String path) {
 		this.path = path;
 		return this;
 	}
 
-	public ResourceMethod setProduces(String[] produces) {
+	public JavaMethod setProduces(String[] produces) {
 		this.produces = produces;
 		return this;
 	}
 
-	public ResourceMethod setRequestMethod(RequestMethod requestMethod) {
+	public JavaMethod setRequestMethod(RequestMethod requestMethod) {
 		this.requestMethod = requestMethod;
 		return this;
 	}

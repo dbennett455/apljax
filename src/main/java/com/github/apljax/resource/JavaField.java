@@ -1,15 +1,12 @@
 package com.github.apljax.resource;
 
+import com.github.apljax.util.Enum.RequestType;
+
 import javassist.bytecode.FieldInfo;
 
-public class ResourceField {
+public class JavaField {
 
-	// JAX-RS parameter types
-	public enum RequestType {
-		PATH, QUERY, MATRIX, HEADER, COOKIE, FORM
-	};
-
-	private ResourceClass myClass=null;
+	private JavaClass myClass=null;
 	private FieldInfo fieldInfo=null;
 	private String name=null;
 	private String javaType = null;  // java data type
@@ -17,7 +14,7 @@ public class ResourceField {
 	private String defaultValue=null;
 	private String comment=null;
 
-	public ResourceField(ResourceClass cls, FieldInfo fld) {
+	public JavaField(JavaClass cls, FieldInfo fld) {
 		super();
 		this.myClass = cls;
 		this.fieldInfo = fld;
@@ -39,7 +36,7 @@ public class ResourceField {
 		return javaType;
 	}
 
-	public ResourceClass getMyClass() {
+	public JavaClass getMyClass() {
 		return myClass;
 	}
 
@@ -51,7 +48,7 @@ public class ResourceField {
 		return type;
 	}
 
-	public ResourceField setComment(String comment) {
+	public JavaField setComment(String comment) {
 		this.comment = comment;
 		return this;
 	}
@@ -60,17 +57,17 @@ public class ResourceField {
 		this.defaultValue = defaultValue;
 	}
 
-	public ResourceField setJavaType(String javaType) {
+	public JavaField setJavaType(String javaType) {
 		this.javaType = javaType;
 		return this;
 	}
 
-	public ResourceField setName(String name) {
+	public JavaField setName(String name) {
 		this.name = name;
 		return this;
 	}
 
-	public ResourceField setRequestType(RequestType type) {
+	public JavaField setRequestType(RequestType type) {
 		this.type = type;
 		return this;
 	}

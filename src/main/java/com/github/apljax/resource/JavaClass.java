@@ -18,9 +18,9 @@ import javassist.bytecode.MethodInfo;
  * @author dbennett455@gmail.com
  *
  */
-public class ResourceClass {
+public class JavaClass {
 
-	private Resources resources=null;
+	private JavaResources resources=null;
 	private ClassFile classFile=null;
 	private String path=null;
 	private String[] produces=null;
@@ -28,17 +28,17 @@ public class ResourceClass {
 	private String comment=null;
 	private String definedResourceId=null;
 	private String defaultPath=null;
-	private TreeMap<String,ResourceField> resourceFields=null;
-	private TreeMap<String,ResourceMethod> resourceMethods=null;
+	private TreeMap<String,JavaField> resourceFields=null;
+	private TreeMap<String,JavaMethod> resourceMethods=null;
 	private PathBuilder pathBuilder=null;
 	private ResourceIdExtractor resourceIdExtractor=null;
 
-	public ResourceClass(Resources r, ClassFile cf) {
+	public JavaClass(JavaResources r, ClassFile cf) {
 		super();
 		this.resources = r;
 		this.classFile = cf;
-		this.resourceFields = new TreeMap<String,ResourceField>();
-		this.resourceMethods = new TreeMap<String,ResourceMethod>();
+		this.resourceFields = new TreeMap<String,JavaField>();
+		this.resourceMethods = new TreeMap<String,JavaMethod>();
 	}
 
 	public ClassFile getClassFile() {
@@ -102,14 +102,14 @@ public class ResourceClass {
 	}
 
 	/**
-	 * get or create a ResourceField for a given path
+	 * get or create a JavaField for a given path
 	 *
 	 * @param path
-	 * @return a ResourceField
+	 * @return a JavaField
 	 */
-	public ResourceField getResourceField(FieldInfo fld) {
+	public JavaField getResourceField(FieldInfo fld) {
 		String key=fld.getName()+fld.getDescriptor();
-		ResourceField ret=this.resourceFields.get(key);
+		JavaField ret=this.resourceFields.get(key);
 		if (ret == null) {
 			ret=newResourceField(this,fld);
 			this.resourceFields.put(key, ret);
@@ -117,7 +117,7 @@ public class ResourceClass {
 		return ret;
 	}
 
-	public TreeMap<String,ResourceField> getResourceFields() {
+	public TreeMap<String,JavaField> getResourceFields() {
 		return resourceFields;
 	}
 
@@ -136,14 +136,14 @@ public class ResourceClass {
 	}
 
 	/**
-	 * get or create a ResourceMethod for a given path
+	 * get or create a JavaMethod for a given path
 	 *
 	 * @param path
-	 * @return a ResourceMethod
+	 * @return a JavaMethod
 	 */
-	public ResourceMethod getResourceMethod(MethodInfo met) {
+	public JavaMethod getResourceMethod(MethodInfo met) {
 		String key=met.getName()+met.getDescriptor();
-		ResourceMethod ret=this.resourceMethods.get(key);
+		JavaMethod ret=this.resourceMethods.get(key);
 		if (ret == null) {
 			ret=newResourceMethod(this,met);
 			this.resourceMethods.put(key, ret);
@@ -151,7 +151,7 @@ public class ResourceClass {
 		return ret;
 	}
 
-	public TreeMap<String,ResourceMethod> getResourceMethods() {
+	public TreeMap<String,JavaMethod> getResourceMethods() {
 		return resourceMethods;
 	}
 
@@ -165,7 +165,7 @@ public class ResourceClass {
 	}
 
 
-	public Resources getResources() {
+	public JavaResources getResources() {
 		return resources;
 	}
 
@@ -173,49 +173,49 @@ public class ResourceClass {
 	 * Create a new Resource field
 	 *
 	 */
-	public ResourceField newResourceField(ResourceClass cls, FieldInfo fld) {
-		return new ResourceField(cls,fld);
+	public JavaField newResourceField(JavaClass cls, FieldInfo fld) {
+		return new JavaField(cls,fld);
 	}
 
 	/**
 	 * Create a new Resource method
 	 *
 	 */
-	public ResourceMethod newResourceMethod(ResourceClass cls, MethodInfo met) {
-		return new ResourceMethod(cls,met);
+	public JavaMethod newResourceMethod(JavaClass cls, MethodInfo met) {
+		return new JavaMethod(cls,met);
 	}
 
-	public ResourceClass setComment(String comment) {
+	public JavaClass setComment(String comment) {
 		this.comment = comment;
 		return this;
 	}
 
-	public ResourceClass setConsumes(String[] consumes) {
+	public JavaClass setConsumes(String[] consumes) {
 		this.consumes = consumes;
 		return this;
 	}
 
-	public ResourceClass setDefaultPath(String defaultPath) {
+	public JavaClass setDefaultPath(String defaultPath) {
 		this.defaultPath = defaultPath;
 		return this;
 	}
 
-	public ResourceClass setDefinedResourceId(String resourceId) {
+	public JavaClass setDefinedResourceId(String resourceId) {
 		this.definedResourceId = resourceId;
 		return this;
 	}
 
-	public ResourceClass setPath(String path) {
+	public JavaClass setPath(String path) {
 		this.path = path;
 		return this;
 	}
 
-	public ResourceClass setProduces(String[] produces) {
+	public JavaClass setProduces(String[] produces) {
 		this.produces = produces;
 		return this;
 	}
 
-	public ResourceClass setResources(Resources resources) {
+	public JavaClass setResources(JavaResources resources) {
 		this.resources = resources;
 		return this;
 	}
