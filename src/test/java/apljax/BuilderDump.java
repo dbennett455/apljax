@@ -9,23 +9,17 @@ import org.junit.Test;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
-
-
-
-
 import com.github.apljax.os.Bowl;
 import com.github.apljax.process.DefaultBuilder;
 import com.github.apljax.util.JavaDataToJavascriptData;
-import com.propertytrak.rest.params.IntegerParam;
-import com.propertytrak.rest.params.LongParam;
 
 public class BuilderDump {
 
-	static {
-		// custom Java classes to Javascript number
-		JavaDataToJavascriptData.addNumberType(IntegerParam.class.getName());
-		JavaDataToJavascriptData.addNumberType(LongParam.class.getName());
-	}
+//	static {
+//		// custom Java classes to Javascript number
+//		JavaDataToJavascriptData.addNumberType(IntegerParam.class.getName());
+//		JavaDataToJavascriptData.addNumberType(LongParam.class.getName());
+//	}
 
     //private final Logger log=LoggerFactory.getLogger(BuilderDump.class);
 	@Test
