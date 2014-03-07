@@ -9,6 +9,7 @@ can be easily serialized to JSON, XML or a custom output format.  The builder ou
 restricted based on the security permissions of the requesting principal so that only the
 REST calls and methods that the user has access to are reported.
 
+```
 Dependencies:
 =============
 
@@ -20,6 +21,7 @@ Dependencies:
 
   You can copy the dependencies out of the pom.xml
 
+```
 Getting started:
 ================
 
