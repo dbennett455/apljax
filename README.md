@@ -13,11 +13,9 @@ Dependencies:
 
   apljax needs the following jars to operate:
 
-  annovention-1.7.jar or better
-
-  javassist-3.18.0-GA.jar or better
-
-  slf4j-api-1.7.6.jar is used for logging
+- annovention-1.7.jar or better
+- javassist-3.18.0-GA.jar or better
+- slf4j-api-1.7.6.jar is used for logging
 
   You can copy the dependencies out of the pom.xml
 
