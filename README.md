@@ -10,6 +10,7 @@ restricted based on the security permissions of the requesting principal so that
 REST calls and methods that the user has access to are reported.
 
 Dependencies:
+=============
 
   apljax needs the following jars to operate:
 
@@ -20,6 +21,7 @@ Dependencies:
   You can copy the dependencies out of the pom.xml
 
 Getting started:
+================
 
 - mvn clean install to build the apljax jar and source jar
 - Add the apljax jar to your JAX-RS application's classpath
