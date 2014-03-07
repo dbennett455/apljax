@@ -111,10 +111,11 @@ public abstract class AbstractBuilder {
 	 * to any method.
 	 *
 	 * @param uri Address URI to check
+	 * @param resourceId the defined resourceId of the method
 	 * @param method request method (null == all methods)
 	 * @return true if principal requester has access
 	 */
-	public abstract boolean hasAccessToURI(String uri, RequestMethod method);
+	public abstract boolean hasAccessToURI(String uri, String resourceId, RequestMethod method);
 
 
 	/**
@@ -174,8 +175,7 @@ public abstract class AbstractBuilder {
 		if (hasAccessToJavaClass(className)) {
 			JavaClass javaClass=javaResources.getResources().get(className);
 			// if we have access to the resource
-			if (hasAccessToResource(javaClass.getResourceId()) &&
-					hasAccessToURI(javaClass.getResourcePath(), null)) {
+			if (hasAccessToResource(javaClass.getResourceId())) {
 				resource=new Resource();
 				bowl.addResource(javaClass.getResourceId(), resource);
 				if (javaClass.getComment() != null)
@@ -202,6 +202,7 @@ public abstract class AbstractBuilder {
 		// check that we have access to the method
 		if (hasAccessToResource(javaMethod.getResourceId()) &&
 				hasAccessToURI(javaMethod.getResourcePath(),
+								javaMethod.getResourceId(),
 								javaMethod.getRequestMethod())
 				) {
 			// handle the path

@@ -1,16 +1,14 @@
 package com.github.apljax.process;
 
+/**
+ * This is the default builder.  It is completely permissive return
+ * true for all access checks.
+ *
+ */
+
 import com.github.apljax.util.Enum.RequestMethod;
 
 public class DefaultBuilder extends AbstractBuilder {
-
-	public boolean canConsumeMediaType(String mediaType) {
-		return true;
-	}
-
-	public boolean canProduceMediaType(String mediaType) {
-		return true;
-	}
 
 	public boolean hasAccessToJavaClass(String className) {
 		return true;
@@ -28,21 +26,23 @@ public class DefaultBuilder extends AbstractBuilder {
 		return true;
 	}
 
-	public boolean hasAccessToRequestMethod(RequestMethod requestMethod) {
-		return true;
-	}
-
-	public boolean hasAccessToRequestParameterName(String parameterName) {
-		return true;
-	}
-
 	public boolean hasAccessToResource(String resourceId) {
 		return true;
 	}
 
-	public boolean hasAccessToURI(String uri, RequestMethod method) {
+	public boolean hasAccessToURI(String uri, String resourceId,
+			RequestMethod method) {
 		return true;
 	}
+
+	public boolean canConsumeMediaType(String mediaType) {
+		return true;
+	}
+
+	public boolean canProduceMediaType(String mediaType) {
+		return true;
+	}
+
 
 
 }
